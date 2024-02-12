@@ -19,7 +19,7 @@ dependencies:
   bloc:
 #  we use flutter_bloc to help in showing the the bloc state in the UI(jo kam hum na bloc ma kiya ha os ko UI ma show kary)
   flutter_bloc:
-  home_widget: ^0.4.1
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:

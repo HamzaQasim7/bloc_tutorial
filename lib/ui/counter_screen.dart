@@ -1,9 +1,14 @@
 import 'package:bloc_tutorial/bloc/counter/counter_bloc.dart';
 import 'package:bloc_tutorial/bloc/counter/counter_event.dart';
 import 'package:bloc_tutorial/bloc/counter/counter_state.dart';
+import 'package:bloc_tutorial/bloc/drop_down/drop_down_bloc.dart';
+import 'package:bloc_tutorial/bloc/drop_down/drop_down_event.dart';
+import 'package:bloc_tutorial/bloc/drop_down/drop_down_state.dart';
 import 'package:bloc_tutorial/ui/switch_slider_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'image_picker.dart';
 
 class CounterScreen extends StatefulWidget {
   static String routeName = '/counter-screen';
@@ -18,6 +23,7 @@ void navigateScreen(BuildContext context) {
 }
 
 class _CounterScreenState extends State<CounterScreen> {
+  List<String> itemsList = ['1', '2', '3', '4'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +44,7 @@ class _CounterScreenState extends State<CounterScreen> {
               ElevatedButton(
                   onPressed: () {
                     context.read<CounterBloc>().add(IncrementCounter());
+                    Navigator.pushNamed(context, ImagePickerScreen.routeName);
                   },
                   child: const Text('Increment')),
               const SizedBox(
@@ -50,7 +57,26 @@ class _CounterScreenState extends State<CounterScreen> {
                   },
                   child: const Text('Decrement')),
             ],
-          )
+          ),
+          BlocBuilder<DropDownBloc, DropDownState>(builder: (context, state) {
+            return Text('Value: ${state.selected}');
+          }),
+          BlocBuilder<DropDownBloc, DropDownState>(builder: (context, state) {
+            return DropdownButton<String>(
+              value: state.selected,
+              onChanged: (String? newValue) {
+                context.read<DropDownBloc>().add(DropDownChange(newValue!));
+              },
+              items: itemsList
+                  .map<DropdownMenuItem<String>>(
+                    (String value) => DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    ),
+                  )
+                  .toList(),
+            );
+          }),
         ],
       ),
     );

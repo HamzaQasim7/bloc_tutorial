@@ -1,20 +1,15 @@
 import 'package:bloc_tutorial/bloc/switch/switch_example_bloc.dart';
 import 'package:bloc_tutorial/ui/counter_screen.dart';
+import 'package:bloc_tutorial/ui/image_picker.dart';
 import 'package:bloc_tutorial/ui/switch_slider_screen.dart';
+import 'package:bloc_tutorial/utils/image_picker_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/counter/counter_bloc.dart';
+import 'bloc/image_picker/image_picker_bloc.dart';
 
-// Future<void> main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await HomeWidget.registerBackgroundCallback(
-//     name: 'HomeWidgetExample',
-//     callback: interactiveCallback,
-//   );
-//   runApp(const MyHomeWidgetApp());
-// }
 void main() {
   runApp(const MyApp());
 }
@@ -28,12 +23,15 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(create: (_) => CounterBloc()),
           BlocProvider(create: (_) => SwitchExampleBloc()),
+          BlocProvider(create: (_) => ImagePickerBloc(ImagePickerUtils())),
         ],
         child: MaterialApp(
           // ye ek tarika ha routes ko define karna
           routes: {
+            // MyHomePage.routeName: (_) => MyHomePage(),
             CounterScreen.routeName: (_) => const CounterScreen(),
             SwitchSliderScreen.routeName: (_) => const SwitchSliderScreen(),
+            ImagePickerScreen.routeName: (_) => const ImagePickerScreen(),
           },
           title: 'Business logic component',
           theme: ThemeData(
@@ -106,36 +104,71 @@ class Employee extends Equatable {
   // int get hashCode => name.hashCode ^ id.hashCode;
 }
 
-class Event {}
+class MyHomePage extends StatefulWidget {
+  static String routeName = '/';
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
 
-class MyHomeWidgetApp extends StatelessWidget {
-  const MyHomeWidgetApp({super.key});
+class _MyHomePageState extends State<MyHomePage> {
+  String title = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // _loadData();
+  }
+  //
+  // Future<void> _loadData() async {
+  //   title = await HomeWidget.getWidgetData('title') ?? '';
+  //   setState(() {});
+  // }
+  //
+  // Future<void> _update() async {
+  //   await HomeWidget.saveWidgetData('title', 'Updated!');
+  //   await HomeWidget.updateWidget(name: 'HomeWidgetExample');
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: const Text('Home Widget Example'),
+          toolbarHeight: 100,
+          backgroundColor: Colors.lightBlueAccent,
+          flexibleSpace: ClipPath(
+            clipper: ClipExample(),
+            child: Container(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.green,
+              child: const Center(
+                  child: Text(
+                "GeeksforGeeks",
+                style: TextStyle(fontSize: 40, color: Colors.white),
+              )),
+            ),
+          ),
         ),
-        body: const Center(
-          child: Text('Main Screen Content'),
-        ),
-      ),
-    );
+        body: Center(child: Text(title)));
   }
 }
 
-class HomeWidgetExample extends StatelessWidget {
-  const HomeWidgetExample({super.key});
+class ClipExample extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    double width = size.width;
+    double height = size.height;
+    Path path = Path();
+    path.lineTo(0, height - 50);
+    path.quadraticBezierTo(width / 2, height, width, height - 50);
+    path.lineTo(width, 0);
+    path.close();
+
+    return path;
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Hello Home Widget!',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      ),
-    );
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return true;
   }
 }

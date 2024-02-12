@@ -1,3 +1,6 @@
+import 'package:bloc_tutorial/bloc/radio_checkBox_buttons/radio_check_box_buttons_bloc.dart';
+import 'package:bloc_tutorial/bloc/radio_checkBox_buttons/radio_check_box_buttons_event.dart';
+import 'package:bloc_tutorial/bloc/radio_checkBox_buttons/radio_check_box_buttons_state.dart';
 import 'package:bloc_tutorial/bloc/switch/switch_example_bloc.dart';
 import 'package:bloc_tutorial/bloc/switch/switch_example_event.dart';
 import 'package:bloc_tutorial/bloc/switch/switch_example_state.dart';
@@ -9,11 +12,34 @@ class SwitchSliderScreen extends StatelessWidget {
   static String routeName = '/switch-screen';
   @override
   Widget build(BuildContext context) {
+    bool? iss = false;
     return Scaffold(
+      appBar: AppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          BlocBuilder<RadioCheckBoxButtonsBloc, RadioCheckBoxButtonsState>(
+              builder: (context, state) {
+            return Checkbox(
+                value: state.checkBox,
+                onChanged: (val) {
+                  context
+                      .read<RadioCheckBoxButtonsBloc>()
+                      .add(CheckBoxButtonChange());
+                });
+          }),
+          BlocBuilder<RadioCheckBoxButtonsBloc, RadioCheckBoxButtonsState>(
+              builder: (context, state) {
+            return Radio(
+                value: state.radio,
+                groupValue: state.radio,
+                onChanged: (v) {
+                  context
+                      .read<RadioCheckBoxButtonsBloc>()
+                      .add(RadioButtonChange());
+                });
+          }),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,7 +74,7 @@ class SwitchSliderScreen extends StatelessWidget {
             height: 20,
           ),
           BlocBuilder<SwitchExampleBloc, SwitchExampleState>(
-            // build only when need or interact
+              // build only when need or interact
               buildWhen: (previous, current) =>
                   previous.slider != current.slider,
               builder: (context, state) {
