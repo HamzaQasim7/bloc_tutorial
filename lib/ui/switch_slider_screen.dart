@@ -12,7 +12,6 @@ class SwitchSliderScreen extends StatelessWidget {
   static String routeName = '/switch-screen';
   @override
   Widget build(BuildContext context) {
-    bool? iss = false;
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -31,14 +30,26 @@ class SwitchSliderScreen extends StatelessWidget {
           }),
           BlocBuilder<RadioCheckBoxButtonsBloc, RadioCheckBoxButtonsState>(
               builder: (context, state) {
-            return Radio(
-                value: state.radio,
-                groupValue: state.radio,
-                onChanged: (v) {
-                  context
-                      .read<RadioCheckBoxButtonsBloc>()
-                      .add(RadioButtonChange());
-                });
+            return Column(
+              children: [
+                Radio(
+                    value: false,
+                    groupValue: state.radio,
+                    onChanged: (v) {
+                      context
+                          .read<RadioCheckBoxButtonsBloc>()
+                          .add(RadioButtonChange());
+                    }),
+                Radio(
+                    value: false,
+                    groupValue: state.radio1,
+                    onChanged: (v) {
+                      context
+                          .read<RadioCheckBoxButtonsBloc>()
+                          .add(RadioButtonChange());
+                    })
+              ],
+            );
           }),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

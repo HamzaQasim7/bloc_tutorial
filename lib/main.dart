@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/counter/counter_bloc.dart';
+import 'bloc/drop_down/drop_down_bloc.dart';
 import 'bloc/image_picker/image_picker_bloc.dart';
+import 'bloc/radio_checkBox_buttons/radio_check_box_buttons_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => CounterBloc()),
           BlocProvider(create: (_) => SwitchExampleBloc()),
           BlocProvider(create: (_) => ImagePickerBloc(ImagePickerUtils())),
+          BlocProvider(create: (_) => DropDownBloc()),
+          BlocProvider(create: (_) => RadioCheckBoxButtonsBloc()),
         ],
         child: MaterialApp(
           // ye ek tarika ha routes ko define karna

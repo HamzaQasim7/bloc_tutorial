@@ -23,7 +23,7 @@ void navigateScreen(BuildContext context) {
 }
 
 class _CounterScreenState extends State<CounterScreen> {
-  List<String> itemsList = ['1', '2', '3', '4'];
+  List<String> itemsList = ['Select Option', '1', '2', '3', '4'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +63,7 @@ class _CounterScreenState extends State<CounterScreen> {
           }),
           BlocBuilder<DropDownBloc, DropDownState>(builder: (context, state) {
             return DropdownButton<String>(
-              value: state.selected,
+              value: itemsList.first,
               onChanged: (String? newValue) {
                 context.read<DropDownBloc>().add(DropDownChange(newValue!));
               },
